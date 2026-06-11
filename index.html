@@ -12,12 +12,13 @@
     --panel: #0f2028;
     --border: #1a3a4a;
     --accent: #00e5ff;
-    --accent2: #ff6b35;
+    --accent2: #2dd4bf;
     --accent3: #39ff14;
     --text: #c8e8f0;
     --text-dim: #4a7a8a;
     --glow: 0 0 20px rgba(0,229,255,0.3);
     --glow-green: 0 0 20px rgba(57,255,20,0.4);
+    --glow-blue: 0 0 20px rgba(45,212,191,0.3);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -30,7 +31,6 @@
     overflow-x: hidden;
   }
 
-  /* Grid background */
   body::before {
     content: '';
     position: fixed;
@@ -91,14 +91,14 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    margin-top: 16px;
-    padding: 8px 18px;
+    margin-top: 14px;
+    padding: 7px 18px;
     background: transparent;
     border: 1px solid var(--text-dim);
     color: var(--text-dim);
     font-family: 'Share Tech Mono', monospace;
     font-size: 0.75rem;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
     cursor: pointer;
     border-radius: 3px;
@@ -109,88 +109,92 @@
     color: var(--accent);
     box-shadow: var(--glow);
   }
-  .btn-help .icon {
-    font-style: normal;
-    font-size: 0.9rem;
-    opacity: 0.8;
-  }
 
-  /* ── Modal Overlay ── */
-  .modal-overlay {
+  /* ── README Modal ── */
+  .readme-overlay {
     display: none;
     position: fixed;
     inset: 0;
-    z-index: 9999;
-    background: rgba(4, 10, 13, 0.85);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
+    z-index: 200;
+    background: rgba(4, 10, 13, 0.88);
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
     align-items: center;
     justify-content: center;
     padding: 20px;
-    animation: overlayIn 0.25s ease;
   }
-  .modal-overlay.open {
+  .readme-overlay.open {
     display: flex;
+    animation: overlayIn 0.22s ease;
   }
   @keyframes overlayIn {
     from { opacity: 0; }
     to   { opacity: 1; }
   }
 
-  .modal {
+  .readme-modal {
     position: relative;
     background: var(--panel);
     border: 1px solid var(--border);
     border-radius: 6px;
     width: 100%;
-    max-width: 640px;
-    max-height: 85vh;
+    max-width: 660px;
+    max-height: 88vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    box-shadow: 0 0 60px rgba(0,229,255,0.07), 0 24px 60px rgba(0,0,0,0.65);
     animation: modalIn 0.28s cubic-bezier(0.22, 1, 0.36, 1);
-    box-shadow: 0 0 60px rgba(0,229,255,0.08), 0 24px 60px rgba(0,0,0,0.6);
   }
   @keyframes modalIn {
-    from { opacity: 0; transform: translateY(18px) scale(0.97); }
+    from { opacity: 0; transform: translateY(16px) scale(0.97); }
     to   { opacity: 1; transform: translateY(0) scale(1); }
   }
 
-  /* top accent line */
-  .modal::before {
+  /* top accent bar */
+  .readme-modal::before {
     content: '';
     display: block;
+    flex-shrink: 0;
     height: 2px;
     background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  }
+  /* bottom accent bar */
+  .readme-modal::after {
+    content: '';
+    display: block;
     flex-shrink: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent3), transparent);
+    opacity: 0.4;
   }
 
-  .modal-header {
+  .readme-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 16px 24px;
+    padding: 14px 22px;
     border-bottom: 1px solid var(--border);
     flex-shrink: 0;
   }
 
-  .modal-title {
+  .readme-title {
     font-family: 'Orbitron', monospace;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 700;
     letter-spacing: 0.3em;
     color: var(--accent);
     text-transform: uppercase;
   }
 
-  .btn-close {
+  .readme-close {
     background: transparent;
     border: 1px solid var(--border);
     color: var(--text-dim);
     font-family: 'Share Tech Mono', monospace;
     font-size: 1rem;
-    width: 32px;
-    height: 32px;
+    width: 30px;
+    height: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -198,149 +202,262 @@
     border-radius: 3px;
     transition: all 0.15s;
     line-height: 1;
+    flex-shrink: 0;
   }
-  .btn-close:hover {
-    border-color: var(--accent2);
-    color: var(--accent2);
-    box-shadow: 0 0 10px rgba(255,107,53,0.25);
+  .readme-close:hover {
+    border-color: #ff6b6b;
+    color: #ff6b6b;
+    box-shadow: 0 0 10px rgba(255,107,107,0.2);
   }
 
-  .modal-body {
-    padding: 28px 28px 32px;
+  .readme-body {
+    padding: 26px 28px 30px;
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: var(--border) transparent;
   }
-  .modal-body::-webkit-scrollbar { width: 4px; }
-  .modal-body::-webkit-scrollbar-track { background: transparent; }
-  .modal-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  .readme-body::-webkit-scrollbar { width: 4px; }
+  .readme-body::-webkit-scrollbar-track { background: transparent; }
+  .readme-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
-  /* README content styling */
-  .readme h1 {
+  /* ── README Content Styles ── */
+  .readme-content h1 {
     font-family: 'Orbitron', monospace;
     font-size: 1rem;
     color: var(--accent);
     letter-spacing: 0.1em;
-    margin-bottom: 4px;
+    margin-bottom: 3px;
   }
-  .readme .subtitle {
-    font-size: 0.75rem;
+  .readme-content .en-title {
+    font-size: 0.72rem;
     color: var(--text-dim);
-    letter-spacing: 0.15em;
+    letter-spacing: 0.18em;
     margin-bottom: 20px;
   }
-  .readme .desc {
-    font-size: 0.82rem;
-    color: var(--text);
-    line-height: 1.7;
-    margin-bottom: 28px;
-  }
 
-  .readme hr {
-    border: none;
-    border-top: 1px solid var(--border);
-    margin: 24px 0;
+  /* changelog table */
+  .changelog-wrap {
+    margin-bottom: 20px;
   }
-
-  .readme h2 {
+  .changelog-label {
     font-family: 'Orbitron', monospace;
-    font-size: 0.68rem;
+    font-size: 0.62rem;
     letter-spacing: 0.25em;
-    color: var(--accent3);
+    color: var(--text-dim);
     text-transform: uppercase;
-    margin-bottom: 16px;
+    margin-bottom: 10px;
     display: flex;
     align-items: center;
     gap: 8px;
   }
-  .readme h2::before {
+  .changelog-label::before {
     content: '';
     display: inline-block;
-    width: 3px;
-    height: 12px;
-    background: var(--accent3);
+    width: 3px; height: 10px;
+    background: var(--accent2);
     border-radius: 1px;
-    box-shadow: 0 0 8px var(--accent3);
+    box-shadow: 0 0 6px var(--accent2);
   }
 
-  .readme ul {
-    list-style: none;
-    padding: 0;
+  .changelog-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.75rem;
+  }
+  .changelog-table th {
+    text-align: left;
+    color: var(--text-dim);
+    padding: 5px 10px 5px 0;
+    font-weight: normal;
+    letter-spacing: 0.1em;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.66rem;
+  }
+  .changelog-table td {
+    padding: 7px 10px 7px 0;
+    color: var(--text);
+    border-bottom: 1px solid rgba(26,58,74,0.4);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  .changelog-table td:first-child {
+    color: var(--accent2);
+    font-family: 'Orbitron', monospace;
+    font-size: 0.68rem;
+    white-space: nowrap;
+    padding-right: 16px;
+  }
+  .changelog-table td:nth-child(2) {
+    color: var(--text-dim);
+    white-space: nowrap;
+    padding-right: 16px;
+    font-size: 0.7rem;
+  }
+
+  .v3-notes {
+    margin-top: 10px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 6px;
+  }
+  .v3-note {
+    font-size: 0.76rem;
+    color: var(--text-dim);
+    padding-left: 14px;
+    position: relative;
+    line-height: 1.5;
+  }
+  .v3-note::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--accent2);
+    font-size: 0.65rem;
+  }
+  .v3-note strong { color: var(--accent2); font-weight: normal; }
+
+  .readme-hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 22px 0;
+  }
+
+  .readme-desc {
+    font-size: 0.8rem;
+    color: var(--text);
+    line-height: 1.75;
+    margin-bottom: 22px;
+  }
+
+  .section-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.64rem;
+    letter-spacing: 0.28em;
+    color: var(--accent3);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-title::before {
+    content: '';
+    display: inline-block;
+    width: 3px; height: 11px;
+    background: var(--accent3);
+    border-radius: 1px;
+    box-shadow: 0 0 7px var(--accent3);
+  }
+
+  .feature-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
     margin-bottom: 4px;
   }
-  .readme ul li {
-    font-size: 0.8rem;
+  .feature-list li {
+    font-size: 0.79rem;
     color: var(--text);
     line-height: 1.6;
     padding-left: 16px;
     position: relative;
   }
-  .readme ul li::before {
+  .feature-list li::before {
     content: '▸';
     position: absolute;
     left: 0;
     color: var(--accent);
-    font-size: 0.7rem;
+    font-size: 0.68rem;
+    top: 1px;
   }
-  .readme ul li strong {
-    color: var(--accent);
-    font-weight: normal;
-  }
+  .feature-list li strong { color: var(--accent); font-weight: normal; }
 
-  .readme .sub-list {
-    margin-top: 8px;
-    gap: 6px;
+  .sub-list {
+    list-style: none;
+    margin-top: 7px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
   }
-  .readme .sub-list li {
-    padding-left: 20px;
+  .sub-list li {
+    font-size: 0.74rem;
     color: var(--text-dim);
-    font-size: 0.76rem;
+    padding-left: 18px;
   }
-  .readme .sub-list li::before {
+  .sub-list li::before {
     content: '·';
+    position: absolute;
+    left: 0;
     color: var(--text-dim);
     font-size: 1rem;
-    top: -2px;
+    top: -3px;
   }
 
-  .readme code {
+  .readme-code {
     font-family: 'Share Tech Mono', monospace;
-    font-size: 0.78rem;
+    font-size: 0.76rem;
     color: var(--accent2);
-    background: rgba(255,107,53,0.1);
-    border: 1px solid rgba(255,107,53,0.2);
+    background: rgba(45,212,191,0.08);
+    border: 1px solid rgba(45,212,191,0.18);
     padding: 1px 6px;
     border-radius: 2px;
   }
 
-  .readme .meta {
+  /* feedback section */
+  .feedback-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 16px 18px;
     display: flex;
-    gap: 24px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .feedback-text {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+  .feedback-text span { color: var(--text); }
+  .btn-feedback {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: transparent;
+    border: 1px solid var(--accent3);
+    color: var(--accent3);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-decoration: none;
+    border-radius: 3px;
+    transition: all 0.2s;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .btn-feedback:hover {
+    background: var(--accent3);
+    color: var(--bg);
+    box-shadow: var(--glow-green);
+  }
+
+  .readme-meta {
+    display: flex;
+    gap: 20px;
     flex-wrap: wrap;
     margin-top: 4px;
   }
-  .readme .meta-item {
-    font-size: 0.75rem;
+  .readme-meta-item {
+    font-size: 0.73rem;
     color: var(--text-dim);
   }
-  .readme .meta-item span {
-    color: var(--text);
-  }
+  .readme-meta-item span { color: var(--text); }
 
-  /* bottom accent line on modal */
-  .modal::after {
-    content: '';
-    display: block;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--accent3), transparent);
-    opacity: 0.4;
-    flex-shrink: 0;
-  }
-
-  /* ── Main layout (unchanged from original) ── */
+  /* ── Original tool styles (unchanged) ── */
   .grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -438,7 +555,7 @@
   }
   .point-b input:focus {
     border-color: var(--accent2);
-    box-shadow: 0 0 12px rgba(255,107,53,0.2);
+    box-shadow: 0 0 12px rgba(45,212,191,0.2);
   }
   .point-b input { color: var(--accent2); }
 
@@ -467,6 +584,21 @@
   }
   .coord-hint.ok  { color: var(--accent3); }
   .coord-hint.err { color: #ff5555; }
+
+  .alt-wrap { position: relative; }
+  .alt-wrap input { padding-right: 32px; }
+  .alt-spin {
+    position: absolute;
+    right: 8px; top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    pointer-events: none;
+    display: none;
+  }
+  .alt-spin.loading { display: block; animation: spin 1s linear infinite; }
+  .alt-spin.done    { display: block; color: var(--accent3); animation: none; }
+  @keyframes spin { to { transform: translateY(-50%) rotate(360deg); } }
 
   .field-full { grid-column: 1 / -1; }
 
@@ -589,12 +721,6 @@
 
   svg.compass { display: block; margin: 0 auto; }
 
-  .divider {
-    grid-column: 1 / -1;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--border), transparent);
-  }
-
   .info-bar {
     display: none;
     background: var(--panel);
@@ -613,10 +739,165 @@
   .info-item .k { font-size: 0.62rem; letter-spacing: 0.2em; color: var(--text-dim); text-transform: uppercase; }
   .info-item .v { font-family: 'Orbitron', monospace; font-size: 1.1rem; color: var(--accent); text-shadow: var(--glow); margin-top: 2px; }
 
+  .btn-share {
+    display: none;
+    width: 100%;
+    margin-top: 16px;
+    padding: 14px;
+    background: transparent;
+    border: 1px solid var(--accent3);
+    color: var(--accent3);
+    font-family: 'Orbitron', monospace;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-share.show { display: block; animation: fadeIn 0.4s ease; }
+  .btn-share::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--accent3);
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    z-index: 0;
+  }
+  .btn-share:hover::before { transform: translateX(0); }
+  .btn-share:hover { color: var(--bg); box-shadow: var(--glow-green); }
+  .btn-share span { position: relative; z-index: 1; }
+
+  /* Share modal */
+  .share-modal-bg {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(4px);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+  }
+  .share-modal-bg.open { display: flex; animation: fadeIn 0.2s ease; }
+  .share-modal {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 32px;
+    max-width: 420px;
+    width: 90%;
+    position: relative;
+  }
+  .share-modal::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent3), transparent);
+  }
+  .share-modal-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    color: var(--accent3);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .share-preview {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 14px;
+    font-size: 0.78rem;
+    line-height: 1.8;
+    color: var(--text);
+    white-space: pre-wrap;
+    margin-bottom: 20px;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  .share-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+  .share-action {
+    flex: 1;
+    min-width: 120px;
+    padding: 10px 16px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .share-action:hover { border-color: var(--accent3); color: var(--accent3); }
+  .share-action.primary { border-color: var(--accent3); color: var(--accent3); }
+  .share-close {
+    position: absolute;
+    top: 14px; right: 16px;
+    background: none; border: none;
+    color: var(--text-dim); font-size: 1.1rem;
+    cursor: pointer; line-height: 1;
+    transition: color 0.2s;
+  }
+  .share-close:hover { color: var(--text); }
+
+  footer {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  .footer-license {
+    text-align: center;
+    padding: 20px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+  }
+
+  .footer-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .footer-text {
+    font-size: 0.72rem;
+    color: #2a5a6a;
+    letter-spacing: 0.05em;
+    line-height: 1.6;
+  }
+
+  .footer-text a {
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-text a:hover { color: var(--accent); }
+
   @media (max-width: 600px) {
-    .grid, .results.show { grid-template-columns: 1fr; }
+    .grid { grid-template-columns: 1fr; }
     .compass-wrap { gap: 20px; }
-    .modal-body { padding: 20px; }
+    .result-val { font-size: 1.15rem; }
+    .result-panel { padding: 16px 12px; }
+    .readme-body { padding: 18px 18px 24px; }
+    .feedback-block { flex-direction: column; align-items: flex-start; }
+  }
+
+  @media (max-width: 400px) {
+    .results.show { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -626,11 +907,8 @@
   <header>
     <h1>方位 &amp; 俯仰計算器</h1>
     <div class="scan-line"></div>
-    <p>Bearing &amp; Elevation Angle Calculator</p>
-    <!-- Help Button -->
-    <button class="btn-help" onclick="openModal()">
-      <i class="icon">◎</i> 查看使用說明
-    </button>
+    <p>Azimuth &amp; Elevation Angle Calculator</p>
+    <button class="btn-help" onclick="openReadme()">◎ &nbsp;查看使用說明</button>
   </header>
 
   <div class="grid">
@@ -648,7 +926,10 @@
       <div class="field-group">
         <div class="field">
           <label>海拔高度 (m)</label>
-          <input type="number" id="a-alt" placeholder="0" step="1">
+          <div class="alt-wrap">
+            <input type="number" id="a-alt" placeholder="自動查詢" step="1">
+            <span class="alt-spin" id="a-alt-spin">↻</span>
+          </div>
         </div>
         <div class="field">
           <label>車頭方向 (°)</label>
@@ -671,7 +952,10 @@
       <div class="field-group">
         <div class="field">
           <label>海拔高度 (m)</label>
-          <input type="number" id="b-alt" placeholder="0" step="1">
+          <div class="alt-wrap">
+            <input type="number" id="b-alt" placeholder="自動查詢" step="1">
+            <span class="alt-spin" id="b-alt-spin">↻</span>
+          </div>
         </div>
         <div class="field">
           <label>車頭方向 (°)</label>
@@ -687,7 +971,7 @@
   <div class="info-bar" id="info-bar">
     <div class="info-item"><div class="k">水平距離</div><div class="v" id="dist-h">—</div></div>
     <div class="info-item"><div class="k">直線距離</div><div class="v" id="dist-3d">—</div></div>
-    <div class="info-item"><div class="k">高度差 (B − A)</div><div class="v" id="alt-diff">—</div></div>
+    <div class="info-item"><div class="k">高度差</div><div class="v" id="alt-diff">—</div></div>
   </div>
 
   <!-- Results -->
@@ -700,18 +984,18 @@
         <div class="result-sub" id="a-bearing-dir">—</div>
       </div>
       <div class="result-row">
-        <div class="result-key">需從車頭旋轉（方位差）</div>
+        <div class="result-key">需從車頭旋轉</div>
         <div class="result-val" id="a-rot">—<span class="unit">°</span></div>
         <div class="result-sub" id="a-rot-dir">—</div>
       </div>
       <div class="result-row">
-        <div class="result-key">俯仰角（需調整）</div>
+        <div class="result-key">俯仰角</div>
         <div class="result-val" id="a-elev">—<span class="unit">°</span></div>
         <div class="result-sub" id="a-elev-dir">—</div>
       </div>
-      <div class="compass-box" style="margin-top:20px">
-        <div class="compass-label">A 的羅盤示意</div>
-        <svg class="compass" id="compass-a" width="120" height="120" viewBox="-60 -60 120 120"></svg>
+      <div style="text-align:center;margin-top:16px">
+        <div class="compass-label">羅盤 A</div>
+        <svg class="compass" id="compass-a" width="110" height="110" viewBox="-60 -60 120 120"></svg>
       </div>
     </div>
 
@@ -723,47 +1007,92 @@
         <div class="result-sub" id="b-bearing-dir">—</div>
       </div>
       <div class="result-row">
-        <div class="result-key">需從車頭旋轉（方位差）</div>
+        <div class="result-key">需從車頭旋轉</div>
         <div class="result-val" id="b-rot">—<span class="unit">°</span></div>
         <div class="result-sub" id="b-rot-dir">—</div>
       </div>
       <div class="result-row">
-        <div class="result-key">俯仰角（需調整）</div>
+        <div class="result-key">俯仰角</div>
         <div class="result-val" id="b-elev">—<span class="unit">°</span></div>
         <div class="result-sub" id="b-elev-dir">—</div>
       </div>
-      <div class="compass-box" style="margin-top:20px">
-        <div class="compass-label">B 的羅盤示意</div>
-        <svg class="compass" id="compass-b" width="120" height="120" viewBox="-60 -60 120 120"></svg>
+      <div style="text-align:center;margin-top:16px">
+        <div class="compass-label">羅盤 B</div>
+        <svg class="compass" id="compass-b" width="110" height="110" viewBox="-60 -60 120 120"></svg>
       </div>
     </div>
   </div>
 
+  <!-- Share button -->
+  <button class="btn-share" id="btn-share" onclick="openShare()"><span>⬆ 分享結果</span></button>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-license">
+      <div class="footer-title">MIT License</div>
+      <div class="footer-text">
+        Copyright © <span id="footer-year"></span> <a href="https://www.instagram.com/fuuuuu_liu" target="_blank" rel="noopener">fuuuuu_liu</a>
+      </div>
+      <div class="footer-text" style="margin-top:6px;font-size:0.62rem;color:#2a4a5a">
+        Permission is hereby granted, free of charge, to any person obtaining a copy of this software to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies, subject to the above copyright notice being included in all copies or substantial portions of the software.
+      </div>
+    </div>
+  </footer>
+
 </div>
 
-<!-- ══════════════ Modal ══════════════ -->
-<div class="modal-overlay" id="modal-overlay" onclick="handleOverlayClick(event)">
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-    <div class="modal-header">
-      <span class="modal-title" id="modal-title">◎ 使用說明</span>
-      <button class="btn-close" onclick="closeModal()" aria-label="關閉">✕</button>
+<!-- ══════════════ README Modal ══════════════ -->
+<div class="readme-overlay" id="readme-overlay" onclick="handleReadmeOverlayClick(event)">
+  <div class="readme-modal" role="dialog" aria-modal="true" aria-labelledby="readme-modal-title">
+    <div class="readme-header">
+      <span class="readme-title" id="readme-modal-title">◎ &nbsp;使用說明</span>
+      <button class="readme-close" onclick="closeReadme()" aria-label="關閉">✕</button>
     </div>
-    <div class="modal-body">
-      <div class="readme">
+    <div class="readme-body">
+      <div class="readme-content">
 
         <h1>方位 &amp; 俯仰計算器</h1>
-        <div class="subtitle">Azimuth &amp; Elevation Angle Calculator</div>
-        <p class="desc">
+        <div class="en-title">Azimuth &amp; Elevation Angle Calculator</div>
+
+        <p class="readme-desc">
           一款計算方位及俯仰的實用小工具，輸入兩點座標後，即時計算雙向方位角、俯仰角與旋轉量，並以動態羅盤圖示視覺化呈現。
         </p>
 
-        <hr>
+        <div class="readme-hr"></div>
 
-        <h2>功能特色</h2>
-        <ul>
+        <!-- Changelog -->
+        <div class="changelog-wrap">
+          <div class="changelog-label">改版資訊</div>
+          <table class="changelog-table">
+            <thead>
+              <tr>
+                <th>版本</th>
+                <th>日期</th>
+                <th>更新內容</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>v3.0</td>
+                <td>2026-06-11</td>
+                <td>版面視覺更新、自動填入海拔高度、新增分享結果功能</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="v3-notes">
+            <div class="v3-note"><strong>版面視覺</strong> — 更容易瀏覽，顏色不易混淆</div>
+            <div class="v3-note"><strong>自動填入高度</strong> — 貼上座標後自動填入海拔高度，也可以手動輸入</div>
+            <div class="v3-note"><strong>分享結果</strong> — 計算後可複製或分享到其他 App</div>
+          </div>
+        </div>
+
+        <div class="readme-hr"></div>
+
+        <div class="section-title">功能特色</div>
+        <ul class="feature-list">
           <li><strong>雙向計算</strong> — 同時輸出「A 朝向 B」與「B 朝向 A」的完整數據</li>
           <li><strong>方位角（Bearing）</strong> — 絕對北方位角（0°–360°）</li>
-          <li><strong>俯仰角（Elevation Angle）</strong> — 考慮海拔高度差的仰角／俯角；若不需計算俯仰，高度欄位填 0 即可</li>
+          <li><strong>俯仰角（Elevation Angle）</strong> — 考慮海拔高度差的仰角／俯角，若不想算俯仰角，高度也可以直接輸入 0</li>
           <li><strong>車頭旋轉量</strong> — 從當前車頭方向到目標方位需旋轉的角度（含左右方向提示）</li>
           <li><strong>距離資訊</strong> — 水平距離、三維直線距離、高度差</li>
           <li><strong>羅盤視覺化</strong> — 動態羅盤，車頭方向與目標方位一目瞭然</li>
@@ -771,17 +1100,27 @@
             <ul class="sub-list">
               <li>可直接完整複製貼上 Google Maps 座標或 iOS 內建指北針 App 座標</li>
               <li>A、B 兩點可以分別貼不同格式，不需要統一</li>
-              <li>十進位小數：<code>25.0478, 121.5319</code></li>
-              <li>DMS 度分秒格式：<code>北緯24°12′45″ 東經120°36′7″</code></li>
+              <li>十進位小數：<span class="readme-code">25.0478, 121.5319</span></li>
+              <li>DMS 度分秒格式：<span class="readme-code">北緯24°12′45″ 東經120°36′7″</span></li>
             </ul>
           </li>
         </ul>
 
-        <hr>
+        <div class="readme-hr"></div>
 
-        <div class="meta">
-          <div class="meta-item">作者 &nbsp;<span>fuuuuu_liu</span></div>
-          <div class="meta-item">授權 &nbsp;<span>MIT License — 自由使用、修改與散布，請保留原作者名稱</span></div>
+        <div class="section-title">使用反饋</div>
+        <div class="feedback-block">
+          <div class="feedback-text"><span>有任何問題或建議</span>，歡迎填寫反饋表單</div>
+          <a class="btn-feedback" href="https://forms.gle/9p1aGw4byF25ghh39" target="_blank" rel="noopener">
+            ✦ 填寫反饋
+          </a>
+        </div>
+
+        <div class="readme-hr"></div>
+
+        <div class="readme-meta">
+          <div class="readme-meta-item">作者 &nbsp;<span>fuuuuu_liu</span></div>
+          <div class="readme-meta-item">授權 &nbsp;<span>MIT License</span></div>
         </div>
 
       </div>
@@ -789,25 +1128,38 @@
   </div>
 </div>
 
-<script>
-// ── Modal controls ──
-function openModal() {
-  document.getElementById('modal-overlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-function closeModal() {
-  document.getElementById('modal-overlay').classList.remove('open');
-  document.body.style.overflow = '';
-}
-function handleOverlayClick(e) {
-  if (e.target === document.getElementById('modal-overlay')) closeModal();
-}
+<!-- Share modal -->
+<div class="share-modal-bg" id="share-modal-bg" onclick="closeShareIfBg(event)">
+  <div class="share-modal">
+    <button class="share-close" onclick="closeShare()">✕</button>
+    <div class="share-modal-title">📡 分享計算結果</div>
+    <div class="share-preview" id="share-preview"></div>
+    <div class="share-btns">
+      <button class="share-action primary" id="btn-copy" onclick="copyResult()">📋 複製</button>
+      <button class="share-action" id="btn-native-share" onclick="nativeShare()">⬆ 分享</button>
+    </div>
+  </div>
+</div>
 
-// ── Main calculator logic (unchanged) ──
+<script>
 const DEG = Math.PI / 180;
 function toRad(d) { return d * DEG; }
 function toDeg(r) { return r / DEG; }
 
+// ── README Modal ──
+function openReadme() {
+  document.getElementById('readme-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeReadme() {
+  document.getElementById('readme-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function handleReadmeOverlayClick(e) {
+  if (e.target === document.getElementById('readme-overlay')) closeReadme();
+}
+
+// ── Math ──
 function bearing(lat1, lon1, lat2, lon2) {
   const φ1 = toRad(lat1), φ2 = toRad(lat2);
   const Δλ = toRad(lon2 - lon1);
@@ -929,6 +1281,50 @@ function parseLatLon(str) {
   return { lat, lon };
 }
 
+const elevTimers = {};
+
+async function fetchElevation(id, lat, lon) {
+  const spin  = document.getElementById(id + '-alt-spin');
+  const input = document.getElementById(id + '-alt');
+  const hint  = document.getElementById(id + '-coord-hint');
+  spin.textContent = '↻';
+  spin.className = 'alt-spin loading';
+  const baseHint = `緯度 ${lat.toFixed(6)}°  經度 ${lon.toFixed(6)}°`;
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 8000);
+    const res = await fetch(
+      `https://api.open-meteo.com/v1/elevation?latitude=${lat}&longitude=${lon}`,
+      { method: 'GET', mode: 'cors', signal: controller.signal }
+    );
+    clearTimeout(timer);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    const elev = Array.isArray(data.elevation) ? data.elevation[0] : data.elevation;
+    if (elev !== undefined && elev !== null && !isNaN(Number(elev))) {
+      input.value = Math.round(Number(elev));
+      spin.textContent = '✓';
+      spin.className = 'alt-spin done';
+      hint.textContent = baseHint + `  高度 ${Math.round(Number(elev))} m`;
+      hint.className = 'coord-hint ok';
+      setTimeout(() => { spin.className = 'alt-spin'; }, 2500);
+    } else {
+      throw new Error('empty elevation');
+    }
+  } catch (e) {
+    spin.className = 'alt-spin';
+    hint.textContent = baseHint + '  （高度請手動輸入）';
+    hint.className = 'coord-hint';
+    if (e.name === 'AbortError') {
+      console.warn('Elevation fetch timed out');
+    } else if (location.protocol === 'file:') {
+      console.info('file:// 開啟時無法呼叫外部 API，請上傳至 GitHub Pages 後使用');
+    } else {
+      console.warn('Elevation fetch failed:', e.message);
+    }
+  }
+}
+
 function parseCoord(id) {
   const input = document.getElementById(id + '-coord');
   const status = document.getElementById(id + '-coord-status');
@@ -944,6 +1340,8 @@ function parseCoord(id) {
     status.textContent = '✓'; status.className = 'coord-status ok';
     hint.textContent = `緯度 ${result.lat.toFixed(6)}°  經度 ${result.lon.toFixed(6)}°`;
     hint.className = 'coord-hint ok';
+    clearTimeout(elevTimers[id]);
+    elevTimers[id] = setTimeout(() => fetchElevation(id, result.lat, result.lon), 600);
   } else {
     status.textContent = '✗'; status.className = 'coord-status err';
     hint.textContent = '格式錯誤，請貼上如「25.0478, 121.5319」的座標';
@@ -985,19 +1383,117 @@ function calculate() {
   document.getElementById('b-elev-dir').textContent = elevB > 0.05 ? '▲ 仰角，需向上抬 ' + elevB.toFixed(2) + '°' : elevB < -0.05 ? '▼ 俯角，需向下壓 ' + Math.abs(elevB).toFixed(2) + '°' : '→ 水平，無需俯仰';
   document.getElementById('dist-h').textContent = fmtDist(horizDist);
   document.getElementById('dist-3d').textContent = fmtDist(dist3d);
-  document.getElementById('alt-diff').textContent = fmt(altDiff, 0) + ' m';
+  document.getElementById('alt-diff').textContent = Math.abs(altDiff).toFixed(0) + ' m';
   document.getElementById('results').className = 'results show';
   document.getElementById('info-bar').className = 'info-bar show';
+  document.getElementById('btn-share').className = 'btn-share show';
   drawCompass('compass-a', aHead, bearAB);
   drawCompass('compass-b', bHead, bearBA);
   setTimeout(() => document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
 }
 
-// Keyboard: Enter to calculate, Escape to close modal
+function buildShareText() {
+  const aRot  = document.getElementById('a-rot-dir').textContent;
+  const aElev = document.getElementById('a-elev-dir').textContent;
+  const aBear = document.getElementById('a-bearing').textContent + ' ' + document.getElementById('a-bearing-dir').textContent;
+  const bRot  = document.getElementById('b-rot-dir').textContent;
+  const bElev = document.getElementById('b-elev-dir').textContent;
+  const bBear = document.getElementById('b-bearing').textContent + ' ' + document.getElementById('b-bearing-dir').textContent;
+  const distH = document.getElementById('dist-h').textContent;
+  const distD = document.getElementById('dist-3d').textContent;
+  const altD  = document.getElementById('alt-diff').textContent;
+  return [
+    '📡 方位俯仰計算結果',
+    '─────────────────',
+    '【點 A → 點 B】',
+    `  方位角：${aBear}`,
+    `  旋轉：${aRot}`,
+    `  俯仰：${aElev}`,
+    '',
+    '【點 B → 點 A】',
+    `  方位角：${bBear}`,
+    `  旋轉：${bRot}`,
+    `  俯仰：${bElev}`,
+    '',
+    `水平距離：${distH}  直線距離：${distD}  高度差：${altD}`,
+    '─────────────────',
+    '工具：Azimuth & Elevation Angle Calculator'
+  ].join('\n');
+}
+
+function openShare() {
+  document.getElementById('share-preview').textContent = buildShareText();
+  document.getElementById('share-modal-bg').className = 'share-modal-bg open';
+}
+function closeShare() {
+  document.getElementById('share-modal-bg').className = 'share-modal-bg';
+}
+function closeShareIfBg(e) {
+  if (e.target === document.getElementById('share-modal-bg')) closeShare();
+}
+
+async function copyResult() {
+  const text = buildShareText();
+  const btn = document.getElementById('btn-copy');
+  try {
+    await navigator.clipboard.writeText(text);
+    btn.textContent = '✓ 已複製！';
+    setTimeout(() => { btn.textContent = '📋 複製'; }, 2000);
+  } catch {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    btn.textContent = '✓ 已複製！';
+    setTimeout(() => { btn.textContent = '📋 複製'; }, 2000);
+  }
+}
+
+async function nativeShare() {
+  const text = buildShareText();
+  const btn = document.getElementById('btn-native-share');
+  if (navigator.share) {
+    try {
+      await navigator.share({ title: '方位俯仰計算結果', text });
+    } catch (e) {
+      if (e.name !== 'AbortError') copyResult();
+    }
+  } else {
+    copyResult();
+    btn.textContent = '✓ 已複製（瀏覽器不支援分享）';
+    setTimeout(() => { btn.textContent = '⬆ 分享'; }, 2500);
+  }
+}
+
+// Auto year in footer
+document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+// Keyboard shortcuts
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeModal();
-  else if (e.key === 'Enter') calculate();
+  if (e.key === 'Escape') {
+    closeReadme();
+    closeShare();
+  } else if (e.key === 'Enter') {
+    // Only calculate if README modal is NOT open
+    if (!document.getElementById('readme-overlay').classList.contains('open')) {
+      calculate();
+    }
+  }
 });
+
+// file:// warning
+if (location.protocol === 'file:') {
+  ['a','b'].forEach(id => {
+    const hint = document.getElementById(id + '-coord-hint');
+    if (hint) {
+      hint.textContent = '請上傳至 GitHub Pages 後，高度才能自動查詢';
+      hint.className = 'coord-hint';
+    }
+  });
+}
 </script>
 </body>
 </html>
