@@ -42,18 +42,5 @@
 
 有任何問題或建議，歡迎透過以下方式回饋：
 
-- **IG 私訊** → [@fuuuuu_liu](https://www.instagram.com/fuuuuu_liu)
-- **填寫反饋表單**（會自動送出，不需要有 IG）→ [點我填寫](https://forms.gle/9p1aGw4byF25ghh39)
+- **填寫反饋表單** → [點我填寫](https://forms.gle/9p1aGw4byF25ghh39)
 
------
-
-## 👤 作者
-
-**fuuuuu_liu**
-Instagram → [@fuuuuu_liu](https://www.instagram.com/fuuuuu_liu)
-
------
-
-## 📄 授權
-
-MIT License — 自由使用、修改與散布，請保留原作者名稱。
