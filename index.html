@@ -407,38 +407,31 @@
 
   /* feedback section */
   .feedback-block {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 16px 18px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    flex-wrap: wrap;
+    padding: 4px 0;
   }
   .feedback-text {
     font-size: 0.78rem;
-    color: var(--text-dim);
-    line-height: 1.5;
+    color: var(--text);
+    line-height: 1.8;
   }
-  .feedback-text span { color: var(--text); }
   .btn-feedback {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 8px 16px;
+    gap: 4px;
+    padding: 4px 12px;
     background: transparent;
     border: 1px solid var(--accent3);
     color: var(--accent3);
     font-family: 'Share Tech Mono', monospace;
-    font-size: 0.75rem;
-    letter-spacing: 0.12em;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
     text-decoration: none;
     border-radius: 3px;
     transition: all 0.2s;
     white-space: nowrap;
     cursor: pointer;
+    vertical-align: middle;
+    margin-left: 4px;
   }
   .btn-feedback:hover {
     background: var(--accent3);
@@ -1111,17 +1104,7 @@
 
         <div class="section-title">使用反饋</div>
         <div class="feedback-block">
-          <div class="feedback-text"><span>有任何問題或建議</span>，歡迎填寫反饋表單</div>
-          <a class="btn-feedback" href="https://forms.gle/9p1aGw4byF25ghh39" target="_blank" rel="noopener">
-            ✦ 填寫反饋
-          </a>
-        </div>
-
-        <div class="readme-hr"></div>
-
-        <div class="readme-meta">
-          <div class="readme-meta-item">作者 &nbsp;<span>fuuuuu_liu</span></div>
-          <div class="readme-meta-item">授權 &nbsp;<span>MIT License</span></div>
+          <span class="feedback-text">有任何問題或建議，歡迎填寫反饋表單&nbsp;<a class="btn-feedback" href="https://forms.gle/9p1aGw4byF25ghh39" target="_blank" rel="noopener">✦ 填寫反饋</a></span>
         </div>
 
       </div>
