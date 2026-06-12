@@ -4,6 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="format-detection" content="telephone=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="方位計算器">
+<meta name="theme-color" content="#00e5ff">
+<meta name="description" content="雙向方位角、俯仰角、旋轉量計算工具，支援離線使用">
+<link rel="manifest" href="manifest.json">
 <title>方位俯仰計算器</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
@@ -87,12 +94,18 @@
     50% { opacity: 1; transform: scaleX(1); }
   }
 
-  /* ── Help Button ── */
+  /* ── Header button row ── */
+  .header-btns {
+    display: inline-flex;
+    gap: 10px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
   .btn-help {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    margin-top: 14px;
+    gap: 7px;
     padding: 7px 18px;
     background: transparent;
     border: 1px solid var(--text-dim);
@@ -893,16 +906,46 @@
   @media (max-width: 400px) {
     .results.show { grid-template-columns: 1fr; }
   }
+
+  /* ── PWA 離線狀態列 ── */
+  .offline-bar {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 300;
+    background: #1a0a00;
+    border-bottom: 1px solid #ff6b35;
+    color: #ff9a5c;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-align: center;
+    padding: 7px 16px;
+    transition: all 0.3s;
+  }
+  .offline-bar.show { display: block; }
+  .offline-bar.online {
+    background: #001a0a;
+    border-color: var(--accent3);
+    color: var(--accent3);
+  }
 </style>
 </head>
 <body>
+<!-- PWA 離線狀態列 -->
+<div class="offline-bar" id="offline-bar">
+  ◉ 目前離線 — 計算功能正常，海拔高度請手動輸入
+</div>
+
 <div class="container">
 
   <header>
     <h1>方位 &amp; 俯仰計算器</h1>
     <div class="scan-line"></div>
     <p>Azimuth &amp; Elevation Angle Calculator</p>
-    <button class="btn-help" onclick="openReadme()">◎ &nbsp;查看使用說明</button>
+    <div class="header-btns">
+      <button class="btn-help" onclick="openReadme()">📖 &nbsp;查看使用說明</button>
+    </div>
   </header>
 
   <div class="grid">
@@ -1067,23 +1110,25 @@
             </thead>
             <tbody>
               <tr>
+                <td>v4.0</td>
+                <td>2026-06-12</td>
+                <td>PWA 離線支援 — 可安裝至主畫面，無網路環境仍可完整計算</td>
+              </tr>
+              <tr>
                 <td>v3.0</td>
                 <td>2026-06-11</td>
                 <td>版面視覺更新、自動填入海拔高度、新增分享結果功能</td>
               </tr>
             </tbody>
           </table>
-          <div class="v3-notes">
-            <div class="v3-note"><strong>版面視覺</strong> — 更容易瀏覽，顏色不易混淆</div>
-            <div class="v3-note"><strong>自動填入高度</strong> — 貼上座標後自動填入海拔高度，也可以手動輸入</div>
-            <div class="v3-note"><strong>分享結果</strong> — 計算後可複製或分享到其他 App</div>
-          </div>
         </div>
 
         <div class="readme-hr"></div>
 
         <div class="section-title">功能特色</div>
         <ul class="feature-list">
+          <li><strong>離線使用</strong> — 所有計算在裝置本機執行，山區、野外無訊號也能正常使用</li>
+          <li><strong>加入主畫面</strong> — 可安裝至手機主畫面，像 App 一樣開啟；iOS 請用 Safari 點分享 → 加入主畫面，Android 請用 Chrome 點 ⋮ → 安裝應用程式</li>
           <li><strong>雙向計算</strong> — 同時輸出「A 朝向 B」與「B 朝向 A」的完整數據</li>
           <li><strong>方位角（Azimuth）</strong> — 絕對北方位角（0°–360°）</li>
           <li><strong>俯仰角（Elevation）</strong> — 考慮海拔高度差的俯仰角，若不想計算可直接輸入0</li>
@@ -1284,12 +1329,19 @@ async function fetchElevation(id, lat, lon) {
     clearTimeout(timer);
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
+    // 檢查 Service Worker 離線標記
+    if (data._offline === true) {
+      throw new Error('offline');
+    }
     const elev = Array.isArray(data.elevation) ? data.elevation[0] : data.elevation;
     if (elev !== undefined && elev !== null && !isNaN(Number(elev))) {
       input.value = Math.round(Number(elev));
       spin.textContent = '✓';
       spin.className = 'alt-spin done';
-      hint.textContent = baseHint + `  高度 ${Math.round(Number(elev))} m`;
+      // 若是快取來的，加上標記
+      const fromCache = res.headers.get('X-SW-Offline') === 'true' ? '' :
+                        (res.headers.get('X-SW-Cache') ? ' (快取)' : '');
+      hint.textContent = baseHint + `  高度 ${Math.round(Number(elev))} m${fromCache}`;
       hint.className = 'coord-hint ok';
       setTimeout(() => { spin.className = 'alt-spin'; }, 2500);
     } else {
@@ -1297,15 +1349,18 @@ async function fetchElevation(id, lat, lon) {
     }
   } catch (e) {
     spin.className = 'alt-spin';
-    hint.textContent = baseHint + '  （高度請手動輸入）';
-    hint.className = 'coord-hint';
-    if (e.name === 'AbortError') {
+    if (e.message === 'offline' || !navigator.onLine) {
+      hint.textContent = baseHint + '  （離線中，請手動輸入高度）';
+    } else if (e.name === 'AbortError') {
+      hint.textContent = baseHint + '  （查詢逾時，請手動輸入）';
       console.warn('Elevation fetch timed out');
     } else if (location.protocol === 'file:') {
-      console.info('file:// 開啟時無法呼叫外部 API，請上傳至 GitHub Pages 後使用');
+      hint.textContent = baseHint + '  （本機開啟，請手動輸入高度）';
     } else {
+      hint.textContent = baseHint + '  （高度請手動輸入）';
       console.warn('Elevation fetch failed:', e.message);
     }
+    hint.className = 'coord-hint';
   }
 }
 
@@ -1490,14 +1545,84 @@ document.addEventListener('keydown', e => {
   }
 });
 
-// file:// warning
+// ── PWA: Service Worker 註冊 ──
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => console.info('[PWA] SW registered, scope:', reg.scope))
+      .catch(err => console.warn('[PWA] SW registration failed:', err));
+  });
+}
+
+// ── PWA: 離線/上線狀態偵測 ──
+const offlineBar = document.getElementById('offline-bar');
+let onlineToast = null;
+
+function updateOnlineStatus() {
+  if (navigator.onLine) {
+    if (offlineBar.classList.contains('show')) {
+      // 剛恢復上線：顯示短暫通知再隱藏
+      offlineBar.textContent = '◉ 已恢復連線';
+      offlineBar.classList.add('online');
+      offlineBar.classList.add('show');
+      // 同時重試高度查詢（若欄位已有座標）
+      ['a','b'].forEach(id => {
+        const coordInput = document.getElementById(id + '-coord');
+        if (coordInput && coordInput.value.trim()) {
+          const result = parseLatLon(coordInput.value.trim());
+          if (result) fetchElevation(id, result.lat, result.lon);
+        }
+      });
+      clearTimeout(onlineToast);
+      onlineToast = setTimeout(() => {
+        offlineBar.classList.remove('show');
+        offlineBar.classList.remove('online');
+      }, 2500);
+    }
+    // 調整 placeholder 提示
+    ['a','b'].forEach(id => {
+      const altInput = document.getElementById(id + '-alt');
+      if (altInput && !altInput.value) altInput.placeholder = '自動查詢';
+    });
+  } else {
+    clearTimeout(onlineToast);
+    offlineBar.textContent = '◉ 目前離線 — 計算功能正常，海拔高度請手動輸入';
+    offlineBar.classList.remove('online');
+    offlineBar.classList.add('show');
+    // 離線時調整 placeholder
+    ['a','b'].forEach(id => {
+      const altInput = document.getElementById(id + '-alt');
+      if (altInput && !altInput.value) altInput.placeholder = '請手動輸入';
+    });
+  }
+}
+
+window.addEventListener('online',  updateOnlineStatus);
+window.addEventListener('offline', updateOnlineStatus);
+// 頁面載入時立即檢查
+if (!navigator.onLine) updateOnlineStatus();
+
+// ── PWA: Android Chrome 靜默安裝（有 prompt 就攔截備用）──
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); });
+
+// ── ESC 關閉 modal（readme / share）──
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    closeReadme();
+    closeShare();
+  }
+});
+
+// ── file:// 本機提示（保留相容性）──
 if (location.protocol === 'file:') {
   ['a','b'].forEach(id => {
     const hint = document.getElementById(id + '-coord-hint');
     if (hint) {
-      hint.textContent = '請上傳至 GitHub Pages 後，高度才能自動查詢';
+      hint.textContent = '請部署至 GitHub Pages，高度才能自動查詢（計算功能正常）';
       hint.className = 'coord-hint';
     }
+    const altInput = document.getElementById(id + '-alt');
+    if (altInput) altInput.placeholder = '請手動輸入';
   });
 }
 </script>
