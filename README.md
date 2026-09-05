@@ -44,3 +44,10 @@
 
 - **填寫反饋表單** → [點我填寫](https://forms.gle/9p1aGw4byF25ghh39)
 
+-----
+
+## ⚖️ 授權與第三方資源
+
+本專案以 [MIT License](LICENSE) 授權。海拔資料由 [Open-Meteo](https://open-meteo.com/) 提供，並依 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) 使用；本工具會將回傳高度四捨五入為整數公尺。
+
+介面使用 Orbitron 與 Share Tech Mono 字型，皆依 SIL Open Font License 1.1 使用。完整的著作權、來源標示與再散布義務請見 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。

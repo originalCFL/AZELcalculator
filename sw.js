@@ -1,13 +1,15 @@
-// ── 方位俯仰計算器 Service Worker v4.0 ──
+// ── 方位俯仰計算器 Service Worker v4.1 ──
 // 負責離線快取所有必要資源，讓 App 在無網路時也能正常運作
 
-const CACHE_NAME = 'bearing-calc-v4';
+const CACHE_NAME = 'bearing-calc-v4.1';
 const ELEVATION_CACHE = 'bearing-elev-v1';  // 高度 API 回應獨立快取
 
 // 核心資源：首次安裝時預先快取
 const PRECACHE_URLS = [
   './index.html',
   './manifest.json',
+  './LICENSE',
+  './THIRD_PARTY_NOTICES.md',
   // Google Fonts CSS（若失敗則離線用系統字型）
   'https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap'
 ];
@@ -18,7 +20,7 @@ self.addEventListener('install', event => {
     caches.open(CACHE_NAME).then(cache => {
       // 字型 CSS 允許失敗（離線安裝時可能無法取得）
       const fontUrl = 'https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap';
-      const coreUrls = ['./index.html', './manifest.json'];
+      const coreUrls = ['./index.html', './manifest.json', './LICENSE', './THIRD_PARTY_NOTICES.md'];
       return Promise.all([
         cache.addAll(coreUrls),
         cache.add(fontUrl).catch(() => {
