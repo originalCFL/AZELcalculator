@@ -4,13 +4,13 @@
 
 ## Open-Meteo Elevation API
 
-- 用途：在使用者輸入座標後查詢海拔高度；Service Worker 會快取成功的 API 回應，供網路暫時不可用時使用。
+- 用途：在使用者輸入座標後查詢海拔高度；本版本不將 API 回應寫入 Service Worker 的持久快取。
 - 來源：<https://api.open-meteo.com/v1/elevation>
 - 來源標示：Open-Meteo（<https://open-meteo.com/>）
 - 授權：Creative Commons Attribution 4.0 International（[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)）。
-- 本工具的處理：將 API 回傳的高度數值四捨五入為整數公尺後顯示；未主張 Open-Meteo 或資料提供者對本工具的背書。
+- 本工具的處理：將 API 回傳的高度數值四捨五入為整數公尺後顯示。自動查詢時，座標與一般連線資料會傳送至 Open-Meteo；未主張 Open-Meteo 或資料提供者對本工具的背書。
 
-使用或再散布本工具所呈現或快取的 Open-Meteo 資料時，應以合理方式保留上述來源標示、CC BY 4.0 連結與處理說明。
+使用或再散布本工具所呈現的 Open-Meteo 資料時，應以合理方式保留上述來源標示、CC BY 4.0 連結與處理說明。
 
 ## Google Fonts：Orbitron
 
