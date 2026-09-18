@@ -1,8 +1,7 @@
-// ── 方位俯仰計算器 Service Worker v4.1 ──
+// ── 方位俯仰計算器 Service Worker v4.2 ──
 // 負責離線快取所有必要資源，讓 App 在無網路時也能正常運作
 
-const CACHE_NAME = 'bearing-calc-v4.1';
-const ELEVATION_CACHE = 'bearing-elev-v1';  // 高度 API 回應獨立快取
+const CACHE_NAME = 'bearing-calc-v4.2';
 
 // 核心資源：首次安裝時預先快取
 const PRECACHE_URLS = [
@@ -37,7 +36,7 @@ self.addEventListener('activate', event => {
     caches.keys().then(keys =>
       Promise.all(
         keys
-          .filter(k => k !== CACHE_NAME && k !== ELEVATION_CACHE)
+          .filter(k => k !== CACHE_NAME)
           .map(k => caches.delete(k))
       )
     ).then(() => self.clients.claim())
@@ -48,7 +47,7 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
 
-  // 1. 高度 API（open-meteo）：網路優先，快取備援，離線時回傳特殊標記
+  // 1. 高度 API（open-meteo）：網路優先，不持久快取敏感座標
   if (url.hostname === 'api.open-meteo.com') {
     event.respondWith(handleElevationRequest(event.request));
     return;
@@ -70,30 +69,15 @@ self.addEventListener('fetch', event => {
   // （例如 Google Forms 連結等，不攔截）
 });
 
-// ── 高度 API 策略：網路優先 → 快取 → 離線回應 ──
+// ── 高度 API 策略：網路優先，不寫入 Cache Storage ──
 async function handleElevationRequest(request) {
-  const url = request.url;
-
-  // 先試網路
   try {
     const networkRes = await fetch(request.clone(), { signal: AbortSignal.timeout(8000) });
-    if (networkRes.ok) {
-      // 快取成功的回應
-      const cache = await caches.open(ELEVATION_CACHE);
-      cache.put(request, networkRes.clone());
-      return networkRes;
-    }
+    if (networkRes.ok) return networkRes;
   } catch (_) {
-    // 網路失敗，繼續往下
+    // 網路失敗時回傳離線標記，讓使用者改為手動輸入高度
   }
 
-  // 試快取
-  const cached = await caches.match(request);
-  if (cached) {
-    return cached;
-  }
-
-  // 完全無法取得：回傳 JSON 讓主程式知道是離線狀態
   return new Response(
     JSON.stringify({ elevation: null, _offline: true }),
     {
