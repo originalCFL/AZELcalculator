@@ -51,3 +51,10 @@
 本專案以 [MIT License](LICENSE) 授權。海拔資料由 [Open-Meteo](https://open-meteo.com/) 提供，並依 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) 使用；本工具會將回傳高度四捨五入為整數公尺。
 
 介面使用 Orbitron 與 Share Tech Mono 字型，皆依 SIL Open Font License 1.1 使用。完整的著作權、來源標示與再散布義務請見 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
+
+
+## ⚠️ 安全與隱私
+
+本工具只供一般估算與學習參考，不應作為航空、航海、武器操作、生命安全、正式測量或其他高風險決策的唯一依據。自動海拔查詢會把輸入座標傳送至 Open-Meteo；請勿輸入機密、軍事部署、私人住所或其他敏感位置。敏感情境請離線使用並手動輸入高度。
+
+詳細內容請見 [隱私說明](PRIVACY.md) 與 [使用條款與免責聲明](TERMS.md)。
