@@ -9,7 +9,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="方位計算器">
 <meta name="theme-color" content="#00e5ff">
-<meta name="description" content="雙向方位角、俯仰角、旋轉量計算工具，支援離線使用">
+<meta name="description" content="雙向方位角、俯仰角、旋轉量計算工具；一般估算用途，支援離線計算。">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <link rel="manifest" href="manifest.json">
 <title>方位俯仰計算器</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
@@ -893,6 +894,21 @@
   }
 
   .footer-text a:hover { color: var(--accent); }
+  .safety-notice {
+    margin: -24px 0 28px;
+    padding: 14px 16px;
+    border: 1px solid #7a5a16;
+    border-left: 4px solid #ffb020;
+    border-radius: 4px;
+    background: rgba(255,176,32,0.07);
+    color: #c9a85e;
+    font-size: 0.75rem;
+    line-height: 1.65;
+    letter-spacing: 0.03em;
+  }
+  .safety-notice strong { color: #ffd27a; }
+  .legal-links { margin-top: 12px; }
+  .legal-links a { margin: 0 5px; }
 
   @media (max-width: 600px) {
     .grid { grid-template-columns: 1fr; }
@@ -947,6 +963,10 @@
       <button class="btn-help" onclick="openReadme()">📖 &nbsp;查看使用說明</button>
     </div>
   </header>
+
+  <aside class="safety-notice" aria-label="安全與隱私提醒">
+    <strong>安全與隱私提醒：</strong>本工具僅供一般估算與學習參考，不得作為航空、航海、武器操作、生命安全、正式測量或其他高風險決策的唯一依據。自動查詢海拔時，座標會傳送至 Open-Meteo；請勿輸入機密、軍事部署、私人住所或其他不適合提供第三方的敏感位置。敏感情境請離線使用並手動輸入海拔。
+  </aside>
 
   <div class="grid">
     <!-- Point A -->
@@ -1074,8 +1094,13 @@
         Permission is hereby granted, free of charge, to any person obtaining a copy of this software to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies, subject to the above copyright notice being included in all copies or substantial portions of the software.
       </div>
       <div class="footer-text" style="margin-top:12px;font-size:0.62rem;color:#2a4a5a">
-        海拔資料：<a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a>，依 <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="license noopener">CC BY 4.0</a> 提供；本工具將回傳高度四捨五入為整數公尺。自動查詢海拔時，輸入的座標會傳送至 Open-Meteo；如屬敏感位置，請離線使用並手動輸入高度。<br>
-        字型：Orbitron、Share Tech Mono（SIL Open Font License 1.1）。<a href="THIRD_PARTY_NOTICES.md" target="_blank" rel="noopener">第三方授權與完整聲明</a>
+        海拔資料：<a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a>（CC BY 4.0）；自動查詢會將座標傳送至該服務。字型：Orbitron、Share Tech Mono（SIL Open Font License 1.1）。
+      </div>
+      <div class="footer-text legal-links">
+        <a href="PRIVACY.md" target="_blank" rel="noopener">隱私說明</a> ·
+        <a href="TERMS.md" target="_blank" rel="noopener">使用條款與免責聲明</a> ·
+        <a href="THIRD_PARTY_NOTICES.md" target="_blank" rel="noopener">第三方授權</a> ·
+        <a href="https://github.com/originalCFL/AZELcalculator" target="_blank" rel="noopener">原始碼</a>
       </div>
     </div>
   </footer>
